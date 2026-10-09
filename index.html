@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nova</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c5cff'/%3E%3Cstop offset='1' stop-color='%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='44' font-family='system-ui' font-size='36' font-weight='700' fill='white' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #0b0e17;
+    --panel: #141a2b;
+    --line: rgba(255, 255, 255, 0.09);
+    --text: #eef1f8;
+    --muted: #8b94ab;
+    --accent: #7c5cff;
+    --accent2: #38bdf8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body {
+    background: radial-gradient(120% 90% at 50% 0%, #141b33 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- home ---------- */
+  #home {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.25rem 4rem;
+    text-align: center;
+  }
+  .logo {
+    width: 84px; height: 84px; border-radius: 22px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: grid; place-items: center;
+    font-size: 44px; font-weight: 800; color: #fff;
+    box-shadow: 0 12px 40px rgba(124, 92, 255, 0.35);
+    margin-bottom: 1.25rem;
+  }
+  h1 { font-size: 2.6rem; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+  .tag { color: var(--muted); margin-bottom: 2rem; font-size: 1.02rem; }
+  #searchForm {
+    width: min(620px, 100%);
+    display: flex; gap: 0.6rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.45rem 0.45rem 0.45rem 1.4rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  }
+  #searchForm:focus-within { border-color: var(--accent); }
+  #searchInput {
+    flex: 1; min-width: 0; background: none; border: 0; outline: 0;
+    color: var(--text); font-size: 1.05rem;
+  }
+  #searchInput::placeholder { color: var(--muted); }
+  #searchForm button {
+    border: 0; cursor: pointer; border-radius: 999px;
+    padding: 0.7rem 1.6rem; font-size: 1rem; font-weight: 700; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+  }
+  #searchForm button:active { transform: scale(0.97); }
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 0.6rem;
+    justify-content: center; margin-top: 1.6rem; max-width: 640px;
+  }
+  .chip {
+    cursor: pointer; border: 1px solid var(--line); background: rgba(255,255,255,0.04);
+    color: var(--text); border-radius: 999px; padding: 0.5rem 1.1rem; font-size: 0.95rem;
+    transition: background 0.15s;
+  }
+  .chip:hover { background: rgba(255,255,255,0.1); }
+  #status { margin-top: 2rem; color: var(--muted); font-size: 0.9rem; }
+  #status.ok { color: #4ade80; }
+  #status.err { color: #f87171; }
+  .fineprint { margin-top: 0.6rem; color: var(--muted); font-size: 0.78rem; opacity: 0.7; }
+
+  /* ---------- browser view ---------- */
+  #browser { height: 100dvh; display: flex; flex-direction: column; }
+  #toolbar {
+    display: flex; align-items: center; gap: 0.35rem;
+    padding: 0.5rem 0.6rem;
+    background: rgba(11, 14, 23, 0.92);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+  .tbtn {
+    border: 1px solid transparent; background: none; color: var(--text);
+    width: 2.3rem; height: 2.3rem; border-radius: 0.6rem;
+    font-size: 1.15rem; cursor: pointer; flex: none;
+    display: grid; place-items: center;
+  }
+  .tbtn:hover { background: rgba(255,255,255,0.08); }
+  #navForm {
+    flex: 1; min-width: 0; display: flex;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 999px; padding: 0 1rem; margin-left: 0.3rem;
+  }
+  #navForm:focus-within { border-color: var(--accent); }
+  #navInput {
+    flex: 1; min-width: 0; background: none; border: 0; outline: 0;
+    color: var(--text); font-size: 0.95rem; height: 2.3rem;
+  }
+  #view { flex: 1; min-height: 0; width: 100%; border: 0; background: #fff; }
+</style>
+</head>
+<body>
+
+  <!-- ================= home / search ================= -->
+  <main id="home">
+    <div class="logo">N</div>
+    <h1>Nova</h1>
+    <p class="tag">Search the web.</p>
+    <form id="searchForm" autocomplete="off">
+      <input id="searchInput" type="text" placeholder="Search or type a URL" aria-label="Search or type a URL" />
+      <button type="submit">Go</button>
+    </form>
+    <div class="chips">
+      <button class="chip" data-url="https://now.gg">now.gg</button>
+      <button class="chip" data-url="https://www.youtube.com">YouTube</button>
+      <button class="chip" data-url="https://www.google.com">Google</button>
+      <button class="chip" data-url="https://www.reddit.com">Reddit</button>
+      <button class="chip" data-url="https://discord.com">Discord</button>
+      <button class="chip" data-url="https://www.twitch.tv">Twitch</button>
+    </div>
+    <p id="status">starting&hellip;</p>
+    <p class="fineprint">Your personal start page.</p>
+  </main>
+
+  <!-- ================= browser ================= -->
+  <div id="browser" hidden>
+    <header id="toolbar">
+      <button class="tbtn" id="backBtn" title="Back">&#8592;</button>
+      <button class="tbtn" id="fwdBtn" title="Forward">&#8594;</button>
+      <button class="tbtn" id="reloadBtn" title="Reload">&#8635;</button>
+      <button class="tbtn" id="homeBtn" title="Home">&#8962;</button>
+      <form id="navForm" autocomplete="off">
+        <input id="navInput" type="text" aria-label="Address" />
+      </form>
+    </header>
+    <iframe id="view" title="Browsing view" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads"></iframe>
+  </div>
+
+  <script src="/assets/uv.bundle.js"></script>
+  <script src="/assets/uv.config.js"></script>
+  <script src="/lib/index.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const statusEl = $("status");
+    const view = $("view");
+    let proxyReady = false;
+
+    const proxied = (url) => __uv$config.prefix + __uv$config.encodeUrl(url);
+
+    // Turn "whatever the user typed" into a real URL.
+    function resolveInput(raw) {
+      const input = raw.trim();
+      if (!input) return null;
+      if (/^https?:\/\//i.test(input)) return input;
+      if (!input.includes(" ") && /^[^\s]+\.[a-z]{2,}(\/\S*)?$/i.test(input)) {
+        return "https://" + input;
+      }
+      return "https://duckduckgo.com/?q=" + encodeURIComponent(input);
+    }
+
+    function openUrl(url) {
+      $("home").hidden = true;
+      $("browser").hidden = false;
+      view.src = proxied(url);
+      $("navInput").value = url;
+      if (location.pathname.startsWith(__uv$config.prefix)) {
+        history.replaceState(null, "", "/");
+      }
+    }
+
+    function goHome() {
+      $("browser").hidden = true;
+      $("home").hidden = false;
+      view.removeAttribute("src");
+      history.replaceState(null, "", "/");
+      $("searchInput").value = "";
+      $("searchInput").focus();
+    }
+
+    // Keep the address bar in sync with where the iframe actually is.
+    view.addEventListener("load", () => {
+      try {
+        const href = view.contentWindow.location.href;
+        const marker = location.origin + __uv$config.prefix;
+        if (href.startsWith(marker)) {
+          const encoded = href.slice(marker.length).split(/[?#]/)[0];
+          if (encoded) $("navInput").value = __uv$config.decodeUrl(encoded);
+        }
+      } catch (e) { /* cross-origin moment, ignore */ }
+    });
+
+    // ---- boot: transport -> service worker ----
+    (async () => {
+      try {
+        const wsProto = location.protocol === "https:" ? "wss://" : "ws://";
+        const connection = new BareMux.BareMuxConnection("/lib/worker.js");
+        await connection.setTransport("/core/index.mjs", [
+          { wisp: wsProto + location.host + "/sync/" },
+        ]);
+        await navigator.serviceWorker.register("/sw.js", { scope: __uv$config.prefix });
+        proxyReady = true;
+        statusEl.textContent = "ready — search anything";
+        statusEl.classList.add("ok");
+
+        // Reopen proxied deep-links (e.g. refreshed tab) inside the browser view.
+        if (location.pathname.startsWith(__uv$config.prefix)) {
+          try {
+            const encoded = location.pathname.slice(__uv$config.prefix.length);
+            openUrl(__uv$config.decodeUrl(encoded));
+          } catch (e) { /* fall through to home */ }
+        }
+      } catch (err) {
+        statusEl.textContent = "couldn't start: " + (err && err.message ? err.message : err);
+        statusEl.classList.add("err");
+      }
+    })();
+
+    // ---- wiring ----
+    $("searchForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!proxyReady) return;
+      const url = resolveInput($("searchInput").value);
+      if (url) openUrl(url);
+    });
+
+    document.querySelectorAll("[data-url]").forEach((el) => {
+      el.addEventListener("click", () => {
+        if (!proxyReady) return;
+        openUrl(el.getAttribute("data-url"));
+      });
+    });
+
+    $("navForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!proxyReady) return;
+      const url = resolveInput($("navInput").value);
+      if (url) {
+        view.src = proxied(url);
+        $("navInput").value = url;
+      }
+    });
+
+    $("backBtn").addEventListener("click", () => { try { view.contentWindow.history.back(); } catch (e) {} });
+    $("fwdBtn").addEventListener("click", () => { try { view.contentWindow.history.forward(); } catch (e) {} });
+    $("reloadBtn").addEventListener("click", () => { try { view.contentWindow.location.reload(); } catch (e) {} });
+    $("homeBtn").addEventListener("click", goHome);
+  </script>
+</body>
+</html>
